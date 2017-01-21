@@ -17,7 +17,8 @@ int main(int argc, char* argv[]){
 
 	int16_t address = 0;
 
-	uint16_t value;
+	//value to be read at a time from file
+	int16_t value;
 
 	//set the output base 
 	std::cout << std::hex;
@@ -27,13 +28,18 @@ int main(int argc, char* argv[]){
 
 		//then get the contents of the file and 
 		//print line by line
-		while(!inFile.eof() && address < 200){
+		while(!inFile.eof()){
 
 			//print address with padding
 			std::cout << std::setw(7) << std::setfill('0') << address << ": ";
-
-			//inFile.read(reinterpret_cast<std::fstream::char_type*>(&value), sizeof value);
-			//std::cout << value << std::endl;
+			
+			for(int i = 0; i < 8 && !inFile.eof(); i++){
+				
+				inFile.read(reinterpret_cast<std::fstream::char_type*>(&value), sizeof value);
+				//std::cout << value;
+				//inFile.read(reinterpret_cast<std::fstream::char_type*>(&value), sizeof value);
+				std::cout << std::setw(4) << std::setfill(' ') << value << ' ';
+			}
 
 			std::cout << std::endl;
 

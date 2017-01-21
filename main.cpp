@@ -7,6 +7,7 @@
 #include <cstdint>
 #include <iomanip>
 
+
 int main(int argc, char* argv[]){
 
 
@@ -15,13 +16,11 @@ int main(int argc, char* argv[]){
 	std::string filename = argv[1];
 	std::ifstream inFile(argv[1], std::ios::binary);
 
-	int16_t address = 0;
+	uint16_t address = 0;
 
 	//value to be read at a time from file
-	int16_t value;
-
-	//set the output base 
-	std::cout << std::hex;
+	uint8_t value1;
+	uint8_t value2;
 
 	//check if the file exist
 	if(inFile.is_open()){
@@ -30,18 +29,33 @@ int main(int argc, char* argv[]){
 		//print line by line
 		while(!inFile.eof()){
 
+			std::string line;
+
 			//print address with padding
 			std::cout << std::setw(7) << std::setfill('0') << address << ": ";
 			
 			for(int i = 0; i < 8 && !inFile.eof(); i++){
 				
-				inFile.read(reinterpret_cast<std::fstream::char_type*>(&value), sizeof value);
-				//std::cout << value;
-				//inFile.read(reinterpret_cast<std::fstream::char_type*>(&value), sizeof value);
-				std::cout << std::setw(4) << std::setfill(' ') << value << ' ';
+				std::string word;
+
+				inFile.read(reinterpret_cast<std::fstream::char_type*>(&value1),
+										sizeof value2);
+				word += value1;
+
+				inFile.read(reinterpret_cast<std::fstream::char_type*>(&value2),
+										sizeof value2);
+				word += value2;
+
+				std::cout << std::hex << std::setw(4);
+				std::cout << std::setfill(' ') << (int)value1 << (int)value2 << ' ';
+
+				line += word;
+
 			}
 
-			std::cout << std::endl;
+	
+			
+			std::cout << line << std::endl;
 
 			address+=16;
 		}

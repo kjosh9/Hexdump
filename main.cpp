@@ -16,7 +16,7 @@ int main(int argc, char* argv[]){
 	std::string filename = argv[1];
 	std::ifstream inFile(argv[1], std::ios::binary);
 
-	uint16_t address = 0;
+	int address = 0;
 
 	//value to be read at a time from file
 	uint8_t value1;
@@ -29,10 +29,10 @@ int main(int argc, char* argv[]){
 		//print line by line
 		while(!inFile.eof()){
 
-			std::string line;
+			uint8_t byte[16];
 
 			//print address with padding
-			std::cout << std::setw(7) << std::setfill('0') << address << ": ";
+			std::cout << std::hex << std::setw(7) << std::setfill('0') << address << ": ";
 			
 			for(int i = 0; i < 8 && !inFile.eof(); i++){
 				
@@ -40,22 +40,24 @@ int main(int argc, char* argv[]){
 
 				inFile.read(reinterpret_cast<std::fstream::char_type*>(&value1),
 										sizeof value2);
-				word += value1;
-
+				byte[i*2] = value1;
+				
 				inFile.read(reinterpret_cast<std::fstream::char_type*>(&value2),
 										sizeof value2);
-				word += value2;
+				byte[i*2+1] = value2;
 
-				std::cout << std::hex << std::setw(4);
-				std::cout << std::setfill(' ') << (int)value1 << (int)value2 << ' ';
+				std::cout << std::setw(2) << std::setfill('0') << (int)value1;
+				std::cout << std::setw(2) << std::setfill('0') << (int)value2 << ' ';
 
-				line += word;
-
-			}
-
-	
+			}	
 			
-			std::cout << line << std::endl;
+			for(int i = 0; i < 16; i++){
+				if(byte[i] < 32)
+					std::cout << ".";
+				else
+					std::cout << byte[i];
+			}
+			std::cout << std::endl;
 
 			address+=16;
 		}

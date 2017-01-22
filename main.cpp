@@ -20,7 +20,6 @@ int main(int argc, char* argv[]){
 
 	//value to be read at a time from file
 	uint8_t value1;
-	uint8_t value2;
 
 	//check if the file exist
 	if(inFile.is_open()){
@@ -31,14 +30,23 @@ int main(int argc, char* argv[]){
 
 			uint8_t byte[16];
 
+			//start with a NULL filled array
+			for(int i = 0; i < 16; i++){
+				byte[i] = 0;
+			}
+
 			//print address with padding
 			std::cout << std::hex << std::setw(7) << std::setfill('0') << address << ": ";
 			
-			for(int i = 0; i < 16 && !inFile.eof(); i++){
+			for(int i = 0; i < 16; i++){
 
 				inFile.read(reinterpret_cast<std::fstream::char_type*>(&value1),
-										sizeof value2);
-				byte[i] = value1;
+										sizeof value1);
+				
+				if(!inFile.eof())
+					byte[i] = value1;
+				else 
+					i = 16;
 			}	
 
 
@@ -58,20 +66,14 @@ int main(int argc, char* argv[]){
 		
 			//print out the text for this line
 			for(int i = 0; i < 16; i++){
-				if(byte[i] < 32 && byte[i] > 0)
+				if((byte[i] < 32 && byte[i] > 0)||(byte[i] > 127))
 					std::cout << ".";
 				else if(byte[i] == 0)
 					std::cout << " ";
 				else
 					std::cout << byte[i];
 			}
-			std::cout << std::endl;	
-
-			//delete the array
-			for(int i = 0; i < 16; i++){
-
-				byte[i] = 0;
-			}
+			std::cout << std::endl;
 
 			address+=16;
 		}

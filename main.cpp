@@ -34,30 +34,42 @@ int main(int argc, char* argv[]){
 			//print address with padding
 			std::cout << std::hex << std::setw(7) << std::setfill('0') << address << ": ";
 			
-			for(int i = 0; i < 8 && !inFile.eof(); i++){
-				
-				std::string word;
+			for(int i = 0; i < 16; i++){
 
 				inFile.read(reinterpret_cast<std::fstream::char_type*>(&value1),
 										sizeof value2);
-				byte[i*2] = value1;
-				
-				inFile.read(reinterpret_cast<std::fstream::char_type*>(&value2),
-										sizeof value2);
-				byte[i*2+1] = value2;
+				byte[i] = value1;
 
-				std::cout << std::setw(2) << std::setfill('0') << (int)value1;
-				std::cout << std::setw(2) << std::setfill('0') << (int)value2 << ' ';
-
+				if(inFile.eof()){
+					for(; i < 16; i++){
+						byte[i] = -1;
+					}
+				}
 			}	
-			
+
+
+			//print out the hex data for this line
+			for(int i = 0; i < 16; i++){
+				if(byte[i] != -1)
+					std::cout << std::setw(2) << std::setfill('0') << 
+					std::hex << (int)byte[i];
+				else
+					std::cout << "  ";
+
+				if(i%2 == 1)
+					std::cout << " ";
+			}
+
+			std::cout << ' ';
+		
+			//print out the text for this line
 			for(int i = 0; i < 16; i++){
 				if(byte[i] < 32)
 					std::cout << ".";
 				else
 					std::cout << byte[i];
 			}
-			std::cout << std::endl;
+			std::cout << std::endl;	
 
 			address+=16;
 		}

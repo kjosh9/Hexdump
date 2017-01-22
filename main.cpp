@@ -38,21 +38,22 @@ int main(int argc, char* argv[]){
 			//print address with padding
 			std::cout << std::hex << std::setw(7) << std::setfill('0') << address << ": ";
 			
-			for(int i = 0; i < 16; i++){
+			int byteIndex = 0;
+			for(byteIndex = 0; byteIndex < 16; byteIndex++){
 
 				inFile.read(reinterpret_cast<std::fstream::char_type*>(&value1),
 										sizeof value1);
 				
 				if(!inFile.eof())
-					byte[i] = value1;
+					byte[byteIndex] = value1;
 				else 
-					i = 16;
+					break;
 			}	
 
 
 			//print out the hex data for this line
 			for(int i = 0; i < 16; i++){
-				if(byte[i] != 0)
+				if(byte[i] != 0 || i < byteIndex)
 					std::cout << std::setw(2) << std::setfill('0') << 
 					std::hex << (int)byte[i];
 				else

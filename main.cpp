@@ -34,23 +34,17 @@ int main(int argc, char* argv[]){
 			//print address with padding
 			std::cout << std::hex << std::setw(7) << std::setfill('0') << address << ": ";
 			
-			for(int i = 0; i < 16; i++){
+			for(int i = 0; i < 16 && !inFile.eof(); i++){
 
 				inFile.read(reinterpret_cast<std::fstream::char_type*>(&value1),
 										sizeof value2);
 				byte[i] = value1;
-
-				if(inFile.eof()){
-					for(; i < 16; i++){
-						byte[i] = -1;
-					}
-				}
 			}	
 
 
 			//print out the hex data for this line
 			for(int i = 0; i < 16; i++){
-				if(byte[i] != -1)
+				if(byte[i] != 0)
 					std::cout << std::setw(2) << std::setfill('0') << 
 					std::hex << (int)byte[i];
 				else
@@ -64,12 +58,20 @@ int main(int argc, char* argv[]){
 		
 			//print out the text for this line
 			for(int i = 0; i < 16; i++){
-				if(byte[i] < 32)
+				if(byte[i] < 32 && byte[i] > 0)
 					std::cout << ".";
+				else if(byte[i] == 0)
+					std::cout << " ";
 				else
 					std::cout << byte[i];
 			}
 			std::cout << std::endl;	
+
+			//delete the array
+			for(int i = 0; i < 16; i++){
+
+				byte[i] = 0;
+			}
 
 			address+=16;
 		}

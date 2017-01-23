@@ -1,12 +1,9 @@
-
-
 #include <fstream>
 #include <cstring>
 #include <iostream>
 #include <cstdlib>
 #include <cstdint>
 #include <iomanip>
-
 
 int main(int argc, char* argv[]){
 
@@ -29,28 +26,34 @@ int main(int argc, char* argv[]){
 		while(!inFile.eof()){
 
 			uint8_t byte[16];
-
+			bool finished = false;
+	
 			//start with a NULL filled array
 			for(int i = 0; i < 16; i++){
 				byte[i] = 0;
 			}
-
-			//print address with padding
-			std::cout << std::hex << std::setw(7) << std::setfill('0') << address << ": ";
-			
+	
+			bool isEmpty = false;
 			int byteIndex = 0;
 			for(byteIndex = 0; byteIndex < 16; byteIndex++){
 
 				inFile.read(reinterpret_cast<std::fstream::char_type*>(&value1),
 										sizeof value1);
-				
+
 				if(!inFile.eof())
 					byte[byteIndex] = value1;
-				else 
+				else if(byteIndex == 0){
+					finished = true;
 					break;
+				}	
+				else
+					break;
+				
 			}	
 
-
+			if(finished == false)
+				std::cout << std::hex << std::setw(7) << std::setfill('0') << address << ": ";
+			
 			//print out the hex data for this line
 			for(int i = 0; i < 16; i++){
 				if(byte[i] != 0 || i < byteIndex)
@@ -74,6 +77,7 @@ int main(int argc, char* argv[]){
 				else
 					std::cout << byte[i];
 			}
+
 			std::cout << std::endl;
 
 			address+=16;

@@ -4,6 +4,7 @@
 #include <cstdlib>
 #include <cstdint>
 #include <iomanip>
+#include <cstdio>
 
 int main(int argc, char* argv[]){
 
@@ -84,12 +85,13 @@ int main(int argc, char* argv[]){
 		}
 	}
 	else{
-		std::cout << "file does not exist" << std::endl;
+		std::cerr << "File does not exist" << std::endl;
+		return EXIT_FAILURE;
 	}
 	
 
 	inFile.close();
 
-	return 0;
+	return EXIT_SUCCESS;
 }
 

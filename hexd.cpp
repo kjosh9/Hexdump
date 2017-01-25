@@ -9,10 +9,17 @@
 int main(int argc, char* argv[]){
 
 
+	if(argc > 2){
+		std::cerr << "Too many arguments!" << std::endl;
+		return EXIT_FAILURE;
+	}
+
 	//get the file from the arguments and 
 	//open the file
 	std::string filename = argv[1];
 	std::ifstream inFile(argv[1], std::ios::binary);
+
+	std::ofstream outFile("test.txt");
 
 	int address = 0;
 
@@ -33,8 +40,7 @@ int main(int argc, char* argv[]){
 			for(int i = 0; i < 16; i++){
 				byte[i] = 0;
 			}
-	
-			bool isEmpty = false;
+
 			int byteIndex = 0;
 			for(byteIndex = 0; byteIndex < 16; byteIndex++){
 
@@ -45,6 +51,8 @@ int main(int argc, char* argv[]){
 					byte[byteIndex] = value1;
 				else if(byteIndex == 0){
 					finished = true;
+					inFile.close();
+					return EXIT_SUCCESS;
 					break;
 				}	
 				else
@@ -52,34 +60,36 @@ int main(int argc, char* argv[]){
 				
 			}	
 
+
 			if(finished == false)
-				std::cout << std::hex << std::setw(7) << std::setfill('0') << address << ": ";
+				std::cout /*outFile*/ << std::hex << std::setw(7) << std::setfill('0') << address << ": ";
 			
 			//print out the hex data for this line
 			for(int i = 0; i < 16; i++){
 				if(byte[i] != 0 || i < byteIndex)
-					std::cout << std::setw(2) << std::setfill('0') << 
+					std::cout /*outFile*/ << std::setw(2) << std::setfill('0') << 
 					std::hex << (int)byte[i];
 				else
-					std::cout << "  ";
-
+					std::cout /*outFile*/ << "  ";
+				
 				if(i%2 == 1)
-					std::cout << " ";
+					std::cout /*outFile*/ << " ";
 			}
 
-			std::cout << ' ';
+			std::cout /*outFile*/ << " ";
 		
 			//print out the text for this line
 			for(int i = 0; i < 16; i++){
 				if((byte[i] < 32 && byte[i] > 0)||(byte[i] > 127))
-					std::cout << ".";
+					std::cout /*outFile*/ << ".";
 				else if(byte[i] == 0)
-					std::cout << " ";
+					std::cout /*outFile*/ << " ";
 				else
-					std::cout << byte[i];
+					std::cout /*outFile*/ << byte[i];
 			}
 
-			std::cout << std::endl;
+			if(finished == false)
+				std::cout /*outFile*/<< std::endl;
 
 			address+=16;
 		}

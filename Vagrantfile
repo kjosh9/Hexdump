@@ -1,7 +1,7 @@
 $bootstrap = <<BOOTSTRAP
 export DEBIAN_FRONTEND=noninteractive
 apt-get update
-apt-get -y install build-essential
+apt-get -y install build-essential cmake
 BOOTSTRAP
 
 Vagrant.configure("2") do |config|

@@ -19,7 +19,7 @@ int main(int argc, char* argv[]){
 	std::string filename = argv[1];
 	std::ifstream inFile(argv[1], std::ios::binary);
 
-	std::ofstream outFile("test.txt");
+	//std::ofstream outFile("test.txt");
 
 	int address = 0;
 
@@ -61,35 +61,47 @@ int main(int argc, char* argv[]){
 			}	
 
 
-			if(finished == false)
-				std::cout /*outFile*/ << std::hex << std::setw(7) << std::setfill('0') << address << ": ";
+			if(finished == false){
+				std::cout << std::hex << std::setw(7) << std::setfill('0') << address << ": ";
+				  //outFile << std::hex << std::setw(7) << std::setfill('0') << address << ": ";
+			}
 			
 			//print out the hex data for this line
 			for(int i = 0; i < 16; i++){
-				if(byte[i] != 0 || i < byteIndex)
-					std::cout /*outFile*/ << std::setw(2) << std::setfill('0') << 
-					std::hex << (int)byte[i];
-				else
-					std::cout /*outFile*/ << "  ";
+				if(byte[i] != 0 || i < byteIndex){
+					std::cout << std::setw(2) << std::setfill('0') << std::hex << (int)byte[i];
+					  //outFile << std::setw(2) << std::setfill('0') << std::hex << (int)byte[i];	
+				}
+				else{
+					std::cout << "  ";
+					  //outFile << "  ";
+				}
 				
-				if(i%2 == 1)
-					std::cout /*outFile*/ << " ";
+				if(i%2 == 1){
+					std::cout << " ";
+					  //outFile << " ";
+				}
 			}
 
-			std::cout /*outFile*/ << " ";
+			std::cout << " ";
+			  //outFile << " ";
 		
 			//print out the text for this line
-			for(int i = 0; i < 16; i++){
-				if((byte[i] < 32 && byte[i] > 0)||(byte[i] > 127))
-					std::cout /*outFile*/ << ".";
-				else if(byte[i] == 0)
-					std::cout /*outFile*/ << " ";
-				else
-					std::cout /*outFile*/ << byte[i];
+			for(int i = 0; i < byteIndex; i++){
+				if((byte[i] < 32)||(byte[i] > 126)){
+					std::cout << ".";
+					  //outFile << ".";
+				}
+				else{
+					std::cout << byte[i];
+					  //outFile << byte[i];
+				}
 			}
 
-			if(finished == false)
-				std::cout /*outFile*/<< std::endl;
+			if(finished == false){
+				std::cout << "\r\n";
+				  //outFile << "\n";
+			}
 
 			address+=16;
 		}

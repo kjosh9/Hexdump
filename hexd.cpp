@@ -19,7 +19,7 @@ int main(int argc, char* argv[]){
 	std::string filename = argv[1];
 	std::ifstream inFile(argv[1], std::ios::binary);
 
-	std::ofstream outFile("test.txt");
+	//std::ofstream outFile("test.txt");
 
 	int address = 0;
 
@@ -63,44 +63,44 @@ int main(int argc, char* argv[]){
 
 			if(finished == false){
 				std::cout << std::hex << std::setw(7) << std::setfill('0') << address << ": ";
-				  outFile << std::hex << std::setw(7) << std::setfill('0') << address << ": ";
+				  //outFile << std::hex << std::setw(7) << std::setfill('0') << address << ": ";
 			}
 			
 			//print out the hex data for this line
 			for(int i = 0; i < 16; i++){
 				if(byte[i] != 0 || i < byteIndex){
 					std::cout << std::setw(2) << std::setfill('0') << std::hex << (int)byte[i];
-					  outFile << std::setw(2) << std::setfill('0') << std::hex << (int)byte[i];	
+					  //outFile << std::setw(2) << std::setfill('0') << std::hex << (int)byte[i];	
 				}
 				else{
 					std::cout << "  ";
-					  outFile << "  ";
+					  //outFile << "  ";
 				}
 				
 				if(i%2 == 1){
 					std::cout << " ";
-					  outFile << " ";
+					  //outFile << " ";
 				}
 			}
 
 			std::cout << " ";
-			  outFile << " ";
+			  //outFile << " ";
 		
 			//print out the text for this line
 			for(int i = 0; i < byteIndex; i++){
 				if((byte[i] < 32)||(byte[i] > 126)){
 					std::cout << ".";
-					  outFile << ".";
+					  //outFile << ".";
 				}
 				else{
 					std::cout << byte[i];
-					  outFile << byte[i];
+					  //outFile << byte[i];
 				}
 			}
 
 			if(finished == false){
 				std::cout << "\n";
-				  outFile << "\n";
+				  //outFile << "\n";
 			}
 
 			address+=16;
